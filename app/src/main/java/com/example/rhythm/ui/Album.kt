@@ -12,15 +12,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,7 +34,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.palette.graphics.Palette
 import com.example.rhythm.R
+import com.example.rhythm.ui.components.SongListItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -49,6 +52,9 @@ fun Album() {
     val fallbackColor = 0xFF1ECCB0
     val imageId = remember { R.drawable.dummy_poster2 }
     var dominantColor by remember { mutableStateOf(Color(fallbackColor)) }
+
+    val listState = rememberLazyListState()
+    val isTopBarVisible by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
 
     LaunchedEffect(imageId) {
         withContext(Dispatchers.Default) {
@@ -64,7 +70,7 @@ fun Album() {
             .fillMaxSize()
             .background(Color(0xFF1F2128))
     ) {
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(state = listState, modifier = Modifier.fillMaxSize()) {
             item {
                 Column(
                     modifier = Modifier
@@ -112,6 +118,9 @@ fun Album() {
                         )
                     }
                 }
+            }
+
+            item {
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -162,74 +171,58 @@ fun Album() {
             }
 
             items(20) {
+                SongListItem("Tum ho toh", "Vishal Mishra")
+            }
+        }
+        Column {
+            if (!isTopBarVisible)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(24.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Column(
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text(
-                            "Tum ho toh",
-                            color = Color.White,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.W500
-                        )
-                        Text(
-                            "Vishal Mishra",
-                            color = Color.White.copy(0.5f),
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.W300,
-                            lineHeight = 1.sp
-                        )
-                    }
                     Image(
-                        painterResource(R.drawable.ic_tune),
+                        painterResource(R.drawable.ic_left_chevron),
                         contentDescription = null,
-                        colorFilter = ColorFilter.tint(Color.White.copy(0.5f)),
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier
+                            .background(Color.Black.copy(0.4f), CircleShape)
+                            .padding(4.dp)
+                            .size(32.dp)
                     )
                     Image(
                         painterResource(R.drawable.ic_vert_more),
                         contentDescription = null,
-                        colorFilter = ColorFilter.tint(Color.White.copy(alpha = 0.5f))
+                        modifier = Modifier
+                            .background(Color.Black.copy(0.4f), CircleShape)
+                            .padding(4.dp)
+                            .size(32.dp)
                     )
                 }
-            }
-        }
-        Column {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Image(
-                    painterResource(R.drawable.ic_left_chevron),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .background(Color.Black.copy(0.4f), CircleShape)
-                        .padding(4.dp)
-                        .size(32.dp)
-                )
-                Image(
-                    painterResource(R.drawable.ic_vert_more),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .background(Color.Black.copy(0.4f), CircleShape)
-                        .padding(4.dp)
-                        .size(32.dp)
-                )
-            }
-            Row(
-                modifier = Modifier
-//                    .height(1.dp)
-                    .fillMaxWidth()
-                    .background(Color.White)
-            ) {}
+            else
+                Column(modifier = Modifier.background(Color(0xFF1F2128))) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Image(
+                            painterResource(R.drawable.ic_left_chevron),
+                            contentDescription = null
+                        )
+                        Image(
+                            painterResource(R.drawable.ic_vert_more),
+                            contentDescription = null
+                        )
+                    }
+                    Row(
+                        modifier = Modifier
+                            .height(0.3.dp)
+                            .fillMaxWidth()
+                            .background(Color.White.copy(0.2f))
+                    ) {}
+                }
         }
     }
 }
