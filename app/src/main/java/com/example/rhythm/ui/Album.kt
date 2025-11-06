@@ -1,5 +1,6 @@
 package com.example.rhythm.ui
 
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,6 +20,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -26,15 +32,33 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.palette.graphics.Palette
 import com.example.rhythm.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun Album() {
+    val context = LocalContext.current
+    val fallbackColor = 0xFF1ECCB0
+    val imageId = remember { R.drawable.dummy_poster2 }
+    var dominantColor by remember { mutableStateOf(Color(fallbackColor)) }
+
+    LaunchedEffect(imageId) {
+        withContext(Dispatchers.Default) {
+            val bitmap = BitmapFactory.decodeResource(context.resources, imageId)
+            val palette = Palette.from(bitmap).generate()
+            val colorInt = palette.getDominantColor(fallbackColor.hashCode())
+            dominantColor = Color(colorInt)
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -48,14 +72,7 @@ fun Album() {
                         .background(
                             Brush.verticalGradient(
                                 listOf(
-                                    Color(0xFF1ECCB0),
-                                    Color(0xFF1ECCB0).copy(0.7f),
-                                    Color(0xFF1ECCB0).copy(0.5f),
-                                    Color(0xFF1ECCB0).copy(0.3f),
-                                    Color(0xFF1ECCB0).copy(0.2f),
-                                    Color(0xFF1ECCB0).copy(0.1f),
-                                    Color(0xFF1ECCB0).copy(0.05f),
-                                    Color(0xFF1ECCB0).copy(0.02f),
+                                    dominantColor,
                                     Color.Transparent
                                 )
                             )
@@ -64,7 +81,7 @@ fun Album() {
                     verticalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
                     Image(
-                        painterResource(R.drawable.dummy_poster),
+                        painterResource(imageId),
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxWidth()
