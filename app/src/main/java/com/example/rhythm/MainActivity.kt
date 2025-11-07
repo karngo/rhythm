@@ -17,7 +17,7 @@ import com.example.rhythm.ui.MusicPermissionHandler
 import com.example.rhythm.ui.getAllSongs
 import com.example.rhythm.ui.model.Song
 import com.example.rhythm.ui.theme.RhythmTheme
-import com.example.rhythm.ui.theme.SongList
+import com.example.rhythm.ui.SongList
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

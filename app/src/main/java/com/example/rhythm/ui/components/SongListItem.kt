@@ -15,15 +15,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rhythm.R
 
 @Composable
-fun SongListItem(text: String, subText: String) {
+fun SongListItem(text: String, subText: String, modifier: Modifier = Modifier) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(24.dp),
@@ -36,7 +37,9 @@ fun SongListItem(text: String, subText: String) {
                 text,
                 color = Color.White,
                 fontSize = 12.sp,
-                fontWeight = FontWeight.W500
+                fontWeight = FontWeight.W500,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Text(
                 subText,
