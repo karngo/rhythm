@@ -6,7 +6,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,12 +24,8 @@ import com.example.rhythm.ui.components.SongListItem
 import com.example.rhythm.ui.model.Song
 
 @Composable
-fun SongList(songs: List<Song>, onSongClicked: (Song) -> Unit = {}) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFF1F2128))
-    ) {
+fun SongList(songs: List<Song>, modifier: Modifier = Modifier, onSongClicked: (Song) -> Unit = {}) {
+    Column(modifier = modifier.background(Color(0xFF1F2128))) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
