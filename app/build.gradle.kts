@@ -58,4 +58,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation("androidx.palette:palette:1.0.0")
+
+    implementation("androidx.media3:media3-exoplayer:1.8.0")
 }

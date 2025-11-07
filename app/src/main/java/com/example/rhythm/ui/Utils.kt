@@ -1,5 +1,6 @@
 package com.example.rhythm.ui
 
+import android.content.ContentUris
 import android.content.Context
 import android.provider.MediaStore
 import com.example.rhythm.ui.model.Song
@@ -32,12 +33,17 @@ fun getAllSongs(context: Context): List<Song> {
         val dataColumn = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
 
         while (it.moveToNext()) {
+            val id = it.getLong(idColumn)
+            val uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id)
+
             val song = Song(
-                id = it.getLong(idColumn),
+                id,
                 title = it.getString(titleColumn),
                 artist = it.getString(artistColumn),
-                data = it.getString(dataColumn)
+                data = it.getString(dataColumn),
+                uri
             )
+
             songList.add(song)
         }
     }

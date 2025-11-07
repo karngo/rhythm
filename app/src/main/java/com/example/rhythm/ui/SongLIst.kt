@@ -20,15 +20,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import com.example.rhythm.ui.components.SongListItem
 import com.example.rhythm.ui.model.Song
 
 @Composable
-fun SongList(songs: List<Song>) {
-    fun onSongClicked() {
-
-    }
-
+fun SongList(songs: List<Song>, onSongClicked: (Song) -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -51,7 +48,7 @@ fun SongList(songs: List<Song>) {
                     song.artist,
                     modifier = Modifier
                         .clickable(
-                            onClick = { onSongClicked() },
+                            onClick = { onSongClicked(song) },
                             indication = ripple(bounded = true, color = Color(0xFF1ECCB0)),
                             interactionSource = remember { MutableInteractionSource() }
                         )
@@ -71,25 +68,29 @@ fun PreviewSongList() {
                 id = 1,
                 title = "Tum ho toh",
                 artist = "Vishal Mishra",
-                data = ""
+                data = "",
+                uri = "".toUri()
             ),
             Song(
                 id = 1,
                 title = "Tum ho toh",
                 artist = "Vishal Mishra",
-                data = ""
+                data = "",
+                uri = "".toUri()
             ),
             Song(
                 id = 1,
                 title = "Tum ho toh",
                 artist = "Vishal Mishra",
-                data = ""
+                data = "",
+                uri = "".toUri()
             ),
             Song(
                 id = 1,
                 title = "Tum ho toh",
                 artist = "Vishal Mishra",
-                data = ""
+                data = "",
+                uri = "".toUri()
             )
         )
     )
